@@ -1,27 +1,66 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png" />
-  <HelloWorld msg="Welcome to Your Vue.js + TypeScript App" />
+  <generateButton @generate="generate" />
+  <tableOfServices :setOfServices="setOfServices" :totalValue="totalValue" />
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import HelloWorld from "./components/HelloWorld.vue";
+import tableOfServices from "./components/tableOfServices.vue";
+import generateButton from "./components/generateButton.vue";
+
+interface MyObj {
+  nameOfServices: string;
+  price: number;
+  quantity: number;
+  value: number;
+}
 
 export default defineComponent({
   name: "App",
   components: {
-    HelloWorld,
+    tableOfServices,
+    generateButton,
+  },
+  data() {
+    return {
+      setOfServices: [] as MyObj[],
+      totalValue: 0,
+    };
+  },
+  methods: {
+    generate() {
+      this.setOfServices = [];
+      for (let i = 0; i < 50; i++) {
+        var randomName: string = Math.random()
+          .toString(36)
+          .replace(/[^a-z]+/g, "")
+          .substring(0, 5);
+        var price = this.normalizeNumber(Math.random() * 1000);
+        var quantity: number = Math.floor(Math.random() * 100) + 1;
+        var value = this.normalizeNumber(quantity * price);
+        this.totalValue = this.normalizeNumber(this.totalValue + value);
+        var tableRow: MyObj = {
+          nameOfServices: randomName,
+          price: price,
+          quantity: quantity,
+          value: value,
+        };
+        this.setOfServices.push(tableRow);
+      }
+    },
+    normalizeNumber(number: number) {
+      return Number(number.toFixed(2));
+    },
   },
 });
 </script>
-
 <style>
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  display: grid;
+  justify-content: center;
+}
+button {
+  width: 200px;
+  justify-self: center;
 }
 </style>
