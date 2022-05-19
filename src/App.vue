@@ -1,6 +1,10 @@
 <template>
   <generateButton @generate="generate" />
-  <tableOfServices :setOfServices="setOfServices" :totalValue="totalValue" />
+  <tableOfServices
+    :setOfServices="setOfServices"
+    :totalValue="totalValue"
+    v-if="totalValue"
+  />
 </template>
 
 <script lang="ts">
@@ -31,10 +35,13 @@ export default defineComponent({
     generate() {
       this.setOfServices = [];
       for (let i = 0; i < 50; i++) {
-        var randomName: string = Math.random()
-          .toString(36)
-          .replace(/[^a-z]+/g, "")
-          .substring(0, 5);
+        var randomName = "";
+        while (randomName.length < 5) {
+          randomName += String.fromCharCode(Math.random() * 1106).replace(
+            /[^а-я]|_/g,
+            ""
+          );
+        }
         var price = this.normalizeNumber(Math.random() * 1000);
         var quantity: number = Math.floor(Math.random() * 100) + 1;
         var value = this.normalizeNumber(quantity * price);
