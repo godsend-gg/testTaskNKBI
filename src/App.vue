@@ -3,7 +3,7 @@
   <tableOfServices
     :setOfServices="setOfServices"
     :totalValue="totalValue"
-    v-if="totalValue"
+    v-if="setOfServices.length"
   />
 </template>
 
